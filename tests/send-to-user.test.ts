@@ -39,6 +39,7 @@ const { sendToUserTool } = await import("../src/agent/tools/send-to-user.ts");
 const { practiceTools } = await import("../src/agent/tools/practice.ts");
 const { NARRATION_BLOCK_REASON, NARRATION_GUARD_MAX_BLOCKS, SEND_TO_USER_DELIVERY_RULE } = await import("../src/agent/narration-guard.ts");
 const { bareQuestionTools, createProberAgent, createTeacherAgent, createPracticeAgent, composeInstructions } = await import("../src/agent/teacher-agent.ts");
+const { learnerNotesPrompt } = await import("../src/agent/tools/learner-notes.ts");
 const { SEND_TO_USER_TOOL, activeProblemOf, asAgentMessages, danglingQuestionOf, newUserMessage, sendToUserText, toLlmMessages, userFacingTextOf } = await import("../src/core/native-messages.ts");
 const { coverageOf, messageFingerprint, messageViewLines, teacherProseBlocks } = await import("../src/core/coverage.ts");
 const { projectView } = await import("../src/core/view.ts");
@@ -109,7 +110,8 @@ describe("send_to_user model gate", () => {
 					assert.equal(output!.description, sendToUserTool.description);
 					assert.equal(typeof output!.prepareArguments, "function", "standard argument healing is wired");
 				}
-				const composed = composeInstructions(kind as keyof typeof factories);
+				// Real registries carry the learner-notes tool, so its block composes before the guard.
+				const composed = `${composeInstructions(kind as keyof typeof factories)}\n\n---\n\n${learnerNotesPrompt()}`;
 				assert.equal(agent.state.systemPrompt, guarded ? `${composed}\n\n---\n\n${SEND_TO_USER_DELIVERY_RULE}` : composed);
 			}
 		});

@@ -77,6 +77,7 @@ import type { ThinkingLevel } from "@earendil-works/pi-agent-core";
 import { prettyModel } from "@/components/usage-format";
 import { cn } from "@/lib/utils";
 import { SettingsGroup, SettingsRow, SettingsMenuTrigger, Toggle, CommitInput } from "./controls.tsx";
+import { LearnerNotesGroup } from "./learner-notes-group.tsx";
 import { ModelMenuList, ThinkingMenuList } from "./model-menu";
 import { ChatGPTBackgroundAccess } from "./chatgpt-connection";
 import { NativeSubscriptionBackgroundAccess } from "./subscription-connections";
@@ -969,6 +970,8 @@ export function AgentSection({
 					/>
 				</SettingsRow>
 			</SettingsGroup>
+
+			<LearnerNotesGroup />
 
 			<SettingsGroup label="System prompts" testid="group-prompts">
 				{prompts === null ? (

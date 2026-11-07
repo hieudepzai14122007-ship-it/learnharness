@@ -24,6 +24,7 @@ import { lsTool } from "./tools/ls.ts";
 import { findTool } from "./tools/find.ts";
 import { grepTool } from "./tools/grep.ts";
 import { createShowImageTool } from "./tools/show-image.ts";
+import { LEARNER_NOTES_TOOL, learnerNotesTool } from "./tools/learner-notes.ts";
 import { healToolRecord } from "./tools/heal.ts";
 import type { GraphStore } from "../core/ports.ts";
 
@@ -340,6 +341,8 @@ export function createProberTools(
 				...(ctx.graphStore
 					? proberGraphTools({ chatStore: ctx.chatStore, graphStore: ctx.graphStore })
 					: {}),
+				// Persistent learner notes: the assessment is where gaps first show.
+				[LEARNER_NOTES_TOOL]: learnerNotesTool,
 				...done,
 			},
 				withoutMechanics(enabled),
@@ -461,6 +464,8 @@ export function createTeacherTools(
 			// The learner-image display twin of read (issue #363): teacher
 			// only, always on — it shows the learner their own file.
 			show_image: createShowImageTool(ctx),
+			// Persistent learner notes (struggling / improving / solid), read by later sessions.
+			[LEARNER_NOTES_TOOL]: learnerNotesTool,
 			...planTools(ctx),
 			...jobTools({ chatId: ctx.chatId, jobStore: ctx.jobStore, spawn: ctx.spawn, searchAvailable: ctx.searchAvailable }),
 		},

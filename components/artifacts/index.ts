@@ -53,4 +53,6 @@ export const artifactRenderers: Record<string, ComponentType<ArtifactPartProps>>
 	// discipline (their results are pre-formatted strings too).
 	list_sessions: ToolCallCard,
 	list_propositions: ToolCallCard,
+	// Learner notes: the same quiet card; the new note reads as plain Markdown on expand.
+	update_learner_notes: ToolCallCard,
 };

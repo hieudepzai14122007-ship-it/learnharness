@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronRight } from "lucide-react";
-import type { ArtifactPartProps } from "@/src/core";
+import { LEARNER_NOTES_TOOL, type ArtifactPartProps } from "@/src/core";
 
 /**
  * The generic tool-call card (sources v1, 2026-09-19): a quiet, collapsed
@@ -67,6 +67,11 @@ export function ToolCallCard({ part }: ArtifactPartProps) {
 	const arg = headlineArg(tool, p.input);
 	const out = outputText(p.output);
 	const failed = p.state === "output-error" || typeof p.errorText === "string";
+	// The learner-notes body is Markdown the learner should read, not escaped JSON.
+	const notes = (p.input as { notes?: unknown } | undefined)?.notes;
+	const inputText = tool === LEARNER_NOTES_TOOL && typeof notes === "string"
+		? notes
+		: JSON.stringify(p.input, null, 2);
 	return (
 		<details
 			data-testid="tool-call-card"
@@ -87,7 +92,7 @@ export function ToolCallCard({ part }: ArtifactPartProps) {
 							Input
 						</div>
 						<pre className="max-h-32 overflow-auto whitespace-pre-wrap break-all font-mono text-[11px] leading-relaxed">
-							{JSON.stringify(p.input, null, 2)}
+							{inputText}
 						</pre>
 					</div>
 				)}

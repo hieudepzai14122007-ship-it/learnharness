@@ -122,6 +122,8 @@ export function asAgentMessages(messages: readonly LhMessage[]): AgentMessage[] 
 // ─── explicit learner-facing output ─────────────────────────────────────────
 
 export const SEND_TO_USER_TOOL = "send_to_user";
+/** Rewrites the persistent learner notes (agent/tools/learner-notes.ts). */
+export const LEARNER_NOTES_TOOL = "update_learner_notes";
 
 /** Read the output tool's message without changing the native call. Also
  * accepts partial arguments while streaming; malformed/empty inputs carry

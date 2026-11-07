@@ -17,6 +17,7 @@ import {
 import { practiceTools, type PracticeToolContext } from "./tools/practice.ts";
 import { healToolRecord, withArgumentHeal } from "./tools/heal.ts";
 import { sendToUserApplies, sendToUserTool } from "./tools/send-to-user.ts";
+import { LEARNER_NOTES_TOOL, learnerNotesPrompt } from "./tools/learner-notes.ts";
 import { makeNarrationGuard, narrationGuardApplies, SEND_TO_USER_DELIVERY_RULE } from "./narration-guard.ts";
 import { createReadTool, readTool } from "./tools/read.ts";
 import { quizInputObject, quizInputProblems } from "../core/question-core.ts";
@@ -187,7 +188,13 @@ function baseAgentOptions(kind: AgentKind, opts: AgentBuildOptions, tools: Agent
 	const composedPrompt = opts.promptSwitches
 		? composeInstructions(kind, opts.promptSwitches)
 		: composedInstructions[kind]!;
-	const systemPrompt = narrationGuard ? `${composedPrompt}\n\n---\n\n${SEND_TO_USER_DELIVERY_RULE}` : composedPrompt;
+	// Learner notes ride the conditional-inclusion rule: the block (doctrine +
+	// the current note, read fresh per build) composes only when the registry
+	// carries the tool, so explicit and bare registries are unchanged.
+	const withNotes = tools.some((tool) => tool.name === LEARNER_NOTES_TOOL)
+		? `${composedPrompt}\n\n---\n\n${learnerNotesPrompt()}`
+		: composedPrompt;
+	const systemPrompt = narrationGuard ? `${withNotes}\n\n---\n\n${SEND_TO_USER_DELIVERY_RULE}` : withNotes;
 	// Debug recorder (owner, 2026-10-04): raw provider events when
 	// LH_PROVIDER_EVENTS=1 and the caller handed a chatId; undefined is
 	// the normal no-observer path (tests, env-off).

@@ -52,6 +52,12 @@ For lessons, attach material to a session instead. Use the graph's **Extract fil
 
 The graph stores propositions and reasoning chains with source provenance, **not mastery scores**. A proposition's presence is not proof that you understood or retained it. Automatic session extraction can be disabled independently of graph rendering.
 
+## Learner notes
+
+Separately from the graph, teaching and practice sessions keep one short Markdown note about you: what you are **struggling with**, **improving** at, and now hold **solidly**, with dates. The prober, teacher, and practice agents read it when they start and rewrite it (`update_learner_notes`) when a session reveals a gap or confirms one is fixed. Each update appears as a collapsed row in the transcript.
+
+Review, correct, or clear the note in **Settings → Agent → Learner notes**. It is stored as `learner-notes.md` in the data folder, is limited to 6,000 characters, and is sent to your configured model provider as part of each session's instructions. It is a model's judgment, not a measurement.
+
 ## Data, privacy, and usage
 
 Chats, graph records, settings, and credentials live on your machine. Packaged desktop data normally lives under:
